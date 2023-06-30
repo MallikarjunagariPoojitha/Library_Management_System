@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+        margin: 0;
+        background-image: linear-gradient(to bottom, #4db4c2, #98c3cd);
+        background-size: 100% 100%;
+        background-position: center;
+        background-size: cover; 
+        background-repeat: no-repeat;
+        min-height: 100vh; /* Update this line */
+      }
+    
+    .navbar {
+        height: 70px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #f8f8f8;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-logo {
+      margin-left: 2cm;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .navbar-menu {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar-menu a {
+        font-size: 23px;
+        display: inline-block;
+        margin-right: 1cm;
+        font-weight: bold;
+        color: #333;
+        text-decoration: none;
+        transition: padding 0.3s;
+    }
+    .navbar-menu a:hover{
+        padding: 12px;
+        text-align: center;
+        background-color: black;
+        border-radius: 10px;
+        color:white;
+    }
+
+    .navbar-menu a i {
+        margin-right: 5px;
+    }
+    .book-container {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-direction: column; 
+      }
+      
+      .book-container img {
+        padding: 20px;
+        width: 200px;
+        height: 300px;
+        margin-right: 10px;
+        border-radius: 40px;
+      }
+      .removeButton {
+        padding: 8px 16px;
+        background-color: #e74c3c;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      
+      .removeButton:hover {
+        background-color: #c0392b;
+      }
+      .bookTitle{
+        color: white;
+      }
+      .checkout{
+        margin-left: 20cm;
+        padding: 8px 16px;
+        background-color: #4dca60;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .checkout:hover{
+        background-color: #187b1b;
+      }
+      .cart-details{
+        display: flex;
+        justify-content: center;
+        border-radius: 10px;
+        color: rgb(66, 58, 58);
+        background-color: rgba(255, 255, 255, 0.56);
+       font-size: 30px;
+       font-weight: bold;
+       padding: 2px;
+        width:20%;
+  margin-left: 16cm;
+        
+      }
+      
+      
+  </style>
+</head>
+<body>
+  
+
+  <div class="navbar">
+    <div class="navbar-logo">LIBRARY</div>
+    <div class="navbar-menu">
+        <a href="index.html"><i class="fa fa-home"></i>Home</a>
+        <a href="index.html#recent-posts"><i class="fa fa-book"></i>Books</a>
+        <a href="explore.html"><i class="fa fa-search"></i>Explore</a>
+        <!-- <a href="signin.html"><i class="fa fa-sign-in"></i>Signin/Signup</a> -->
+        <a href="logout.html"><i class="fa fa-sign-out"></i> Logout</a>
+        <a href="index.html#recent-posts"><i class="fa fa-envelope"></i> Contact</a>
+    </div>
+</div>
+<h1 class="cart-details">Cart Details</h1>
+  <div id="cart-items"></div>
+
+
+
+  <script>
+    
+    const cartItems = localStorage.getItem('cartItems');
+    const cartItemsContainer = document.getElementById('cart-items');
+
+    if (cartItems) {
+      
+      const cartItemsArray = JSON.parse(cartItems);
+
+      
+      cartItemsArray.forEach(item => {
+        const bookContainer = document.createElement('div');
+        bookContainer.classList.add('book-container');
+
+        const bookImage = document.createElement('img');
+        bookImage.src = item.image;
+        bookImage.alt = item.title;
+        bookContainer.appendChild(bookImage);
+
+        const bookTitle = document.createElement('h2');
+        bookTitle.textContent = item.title;
+        bookTitle.classList.add('bookTitle');
+        bookContainer.appendChild(bookTitle);
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.classList.add('removeButton');
+
+        removeButton.addEventListener('click', function() {
+          
+          removeBookFromCart(item);
+        });
+        bookContainer.appendChild(removeButton);
+
+        cartItemsContainer.appendChild(bookContainer);
+      });
+    } else {
+      cartItemsContainer.textContent = 'Cart is empty.';
+    }
+
+    function removeBookFromCart(book) {
+      
+      const storedCartItems = localStorage.getItem('cartItems');
+
+      if (storedCartItems) {
+       
+        const cartItemsArray = JSON.parse(storedCartItems);
+
+        
+        const bookIndex = cartItemsArray.findIndex(item => item.title === book.title);
+
+        if (bookIndex !== -1) {
+          
+          cartItemsArray.splice(bookIndex, 1);
+
+         
+          localStorage.setItem('cartItems', JSON.stringify(cartItemsArray));
+
+          
+          location.reload();
+        }
+      }
+    }
+  </script>
+  <button type="submit" class="checkout">CheckOut</button>
+  
+</body>
+</html>
